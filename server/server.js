@@ -6,11 +6,30 @@ const {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
+var {logData} = require('./models/logData');
 
 var app = express();
 const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
+
+
+app.post('/logData', (req, res) => {
+    var logdata = new logData({
+      area: req.body.area,
+      lat: req.body.lat,
+      long: req.body.long,
+      contestID: req.body.contestID
+    });
+  
+    logdata.save().then((doc) => {
+      res.send(doc);
+    }, (e) => {
+      res.status(400).send(e);
+    });
+  });
+
+
 
 app.post('/todos', (req, res) => {
   var todo = new Todo({
