@@ -13,7 +13,6 @@ const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 
-
 app.post('/logData', (req, res) => {
     var logdata = new logData({
       area: req.body.area,
@@ -86,7 +85,7 @@ app.delete('/todos/:id', (req, res) => {
     res.status(400).send();
   });
 });
-
+//**   */
 app.patch('/todos/:id', (req, res) => {
   var id = req.params.id;
   var body = _.pick(req.body, ['text', 'completed']);
@@ -112,6 +111,27 @@ app.patch('/todos/:id', (req, res) => {
     res.status(400).send();
   })
 });
+// POST USER
+
+app.post('/users',(req,res)=>{
+  debugger
+  console.log(`Into User`);
+ var body = _.pick(req.body,['email','passcode'])
+ var user = User(body)
+console.log(`usersthing:- ${user}`)
+user.save().then(() => {
+  return user.generateAuthToken();
+}).then((token) => {
+  var userObject = user.toObject();
+
+  var result = _.pick(userObject, ['_id', 'email']);
+  res.header('x-auth', token).send(result);
+}).catch((e) => {
+  res.status(400).send(e);
+})
+})
+
+
 
 app.listen(port, () => {
   console.log(`Started up at port ${port}`);
