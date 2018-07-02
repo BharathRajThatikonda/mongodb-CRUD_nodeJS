@@ -71,12 +71,13 @@ UserSchema.methods.to12JSON = function () {
      return token;
     });
   };
+  //******* find by token ********
   UserSchema.statics.findByToken = function (token) {
     var User = this;
     var decoded;
   
     try {
-      decoded = jwt.verify(token, 'abc123');
+      decoded = jwt.verify(token, 'bharth4d9');
     } catch (e) {
       return Promise.reject();
     }
